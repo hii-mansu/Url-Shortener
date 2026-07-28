@@ -1,8 +1,10 @@
-import express, { urlencoded } from "express";
+import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import compression from "compression";
+import { errorHandler } from "./middlewares/errorHandler.js";
+import authRouter from "./mudules/auth/auth.routes.js";
 
 
 
@@ -16,4 +18,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.use("/api/v1/auth", authRouter);
+
+app.use(errorHandler);
 export default app;

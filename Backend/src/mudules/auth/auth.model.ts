@@ -17,6 +17,7 @@ const userSchema = new Schema<IUser>({
     password:{
         type: String,
         required: true,
+        select: false,
     },
     profilePicture:{
         type: String,
@@ -24,6 +25,7 @@ const userSchema = new Schema<IUser>({
     },
     refreshToken:{
         type: String,
+        select: false,
     },
     emailVerified:{
         type: Boolean,
