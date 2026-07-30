@@ -72,6 +72,24 @@ async refresh(refreshToken: string) {
         accessToken,
     };
 }
+
+async logout(refreshToken: string) {
+    verifyRefreshToken(refreshToken);
+
+    const hashedRefreshToken = hashToken(refreshToken);
+
+    const user = await authRepository.findByRefreshToken(hashedRefreshToken);
+
+    if (!user) {
+        return;
+    }
+
+    user.refreshToken = "";
+
+    await user.save();
+    return true;
+}
+
 }
 
 export default new authService();

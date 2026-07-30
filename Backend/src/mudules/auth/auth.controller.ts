@@ -44,8 +44,8 @@ class authController {
   };
 
   refresh = async (req: Request, res: Response) => {
-
     const refreshToken = req.cookies.refreshToken;
+
     if (!refreshToken) {
       throw new UnauthorizedError("Anauthorized, login again.");
     }
@@ -55,9 +55,30 @@ class authController {
       message: "Access token refreshed successfully.",
       data: {
         user,
-        accessToken
+        accessToken,
       },
     });
   };
+
+logout = async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+        throw new UnauthorizedError("Authentication required.");
+    }
+
+    await authService.logout(refreshToken);
+
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: env.NODE_ENV === "production",
+        sameSite: "lax",
+    });
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged out successfully.",
+    });
+};
 }
 export default new authController();
