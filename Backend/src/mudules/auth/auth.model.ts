@@ -33,7 +33,7 @@ const userSchema = new Schema<IUser>({
     },
     provider:{
         type: String,
-        options: ["email", "google"],
+        enum: ["email", "google"],
         default: "email"
     }
 },

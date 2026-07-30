@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export interface RegisterUserDto {
     name: string;
     email: string;
@@ -10,6 +12,9 @@ export interface loginUserDto{
 }
 
 export interface IUser{
+
+    _id: Types.ObjectId;
+
     name: string;
     email: string;
     password: string;

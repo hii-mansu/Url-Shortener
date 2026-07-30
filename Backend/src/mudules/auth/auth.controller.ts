@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import authService from "./auth.service.js";
 import { env } from "../../config/env.js";
+import { UnauthorizedError } from "../../errors/UnauthorizedError.js";
 
 class authController {
   register = async (req: Request, res: Response) => {
@@ -33,6 +34,30 @@ class authController {
       },
     });
   };
-}
 
+  profile = async (req: Request, res: Response) => {
+    return res.status(200).json({
+      success: true,
+      message: "Profile fetched successfully.",
+      data: req.user,
+    });
+  };
+
+  refresh = async (req: Request, res: Response) => {
+
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      throw new UnauthorizedError("Anauthorized, login again.");
+    }
+    const { user, accessToken } = await authService.refresh(refreshToken);
+    return res.status(200).json({
+      success: true,
+      message: "Access token refreshed successfully.",
+      data: {
+        user,
+        accessToken
+      },
+    });
+  };
+}
 export default new authController();

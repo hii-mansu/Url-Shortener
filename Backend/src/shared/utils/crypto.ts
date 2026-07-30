@@ -6,3 +6,4 @@ export const hashToken = (token: string) => {
         .update(token)
         .digest("hex");
 };
+
