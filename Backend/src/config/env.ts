@@ -15,9 +15,11 @@ export const env = cleanEnv(process.env, {
 
   MONGO_URI: str(),
 
-  JWT_SECRET: str(),
+  JWT_ACCESS_SECRET: str(),
+  JWT_ACCESS_EXPIRES_IN: str(),
 
-  JWT_EXPIRES_IN: str(),
+  JWT_REFRESH_SECRET: str(),
+  JWT_REFRESH_EXPIRES_IN: str(),
 
   REDIS_URL: str(),
 });
