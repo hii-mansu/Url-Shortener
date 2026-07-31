@@ -8,7 +8,3 @@ export interface IUrl {
     isActive: boolean;
     expiresAt?: Date | null;
 }
-
-export interface CreateUrlDto {
-    originalUrl: string;
-}
