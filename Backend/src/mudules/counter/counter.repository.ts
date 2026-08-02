@@ -1,3 +1,4 @@
+import Url from "../url/url.model.js";
 import Counter from "./counter.model.js";
 
 class CounterRepository {
@@ -20,6 +21,20 @@ class CounterRepository {
     }
 
     return counter.seq;
+  }
+
+      async incrementClicks(id: string) {
+      return Url.findByIdAndUpdate(
+          id,
+          {
+              $inc: {
+                  clicks: 1,
+              },
+          },
+          {
+              new: true,
+          }
+      );
   }
 }
 

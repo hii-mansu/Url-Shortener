@@ -6,6 +6,7 @@ import compression from "compression";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import authRouter from "./mudules/auth/auth.routes.js";
 import urlRouter from "./mudules/url/url.routes.js";
+import urlController from "./mudules/url/url.controller.js";
 
 
 
@@ -21,6 +22,8 @@ app.use(express.urlencoded({extended: true}));
 
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/urls", urlRouter);
+
+app.get("/:shortCode", urlController.redirect);
 
 app.use(errorHandler);
 export default app;

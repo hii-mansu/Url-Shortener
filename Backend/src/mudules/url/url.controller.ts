@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import urlService from "./url.service.js";
-import { success } from "zod";
+
+interface RedirectParams {
+    shortCode: string;
+}
 
 
 class UrlController{
@@ -12,6 +15,12 @@ class UrlController{
             data
         })
     }
+
+    redirect = async (req: Request<RedirectParams>, res: Response) => {
+    const originalUrl = await urlService.redirect(req.params.shortCode);
+
+    return res.redirect(originalUrl);
+};
 }
 
 export default new UrlController();

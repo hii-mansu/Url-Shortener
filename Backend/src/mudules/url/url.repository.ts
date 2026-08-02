@@ -21,6 +21,9 @@ class UrlRepository {
     async deleteById(id: string) {
         return Url.findByIdAndDelete(id);
     }
+
 }
+
+
 
 export default new UrlRepository();

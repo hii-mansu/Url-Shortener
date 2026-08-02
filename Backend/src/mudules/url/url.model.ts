@@ -22,6 +22,7 @@ const urlSchema = new Schema<IUrl>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      select: false
     },
 
     clicks: {

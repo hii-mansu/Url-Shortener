@@ -7,10 +7,11 @@ import urlController from "./url.controller.js";
 const urlRouter = Router();
 
 urlRouter.post(
-    "/create",
-    protectMiddleware,
-    validateRequest(createUrlSchema),
-    urlController.create
+  "/create",
+  protectMiddleware,
+  validateRequest(createUrlSchema),
+  urlController.create,
 );
+
 
 export default urlRouter;
