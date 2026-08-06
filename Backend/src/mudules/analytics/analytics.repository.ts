@@ -9,6 +9,10 @@ class AnalyticsRepository {
     async findByUrl(urlId: string) {
         return Analytics.find({ url: urlId }).sort({ createdAt: -1 });
     }
+
+    async findAnalyticsByUrl(urlId: string) {
+    return Analytics.find({ url: urlId }).sort({ createdAt: -1 });
+}
 }
 
 export default new AnalyticsRepository();
