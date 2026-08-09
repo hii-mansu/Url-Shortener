@@ -8,6 +8,7 @@ import { ForbiddenError } from "../../errors/ForbiddenError.js";
 import { GoneError } from "../../errors/GoneError.js";
 import { parseUserAgent } from "../../shared/utils/userAgent.js";
 import analyticsService from "../analytics/analytics.service.js";
+import redisClient from "../../shared/lib/redis.js";
 
 class UrlService {
   async create(userId: Types.ObjectId, urlData: CreateUrlDto) {
@@ -31,19 +32,41 @@ class UrlService {
     };
   }
 
-  async redirect(data: RedirectUrlDto) {
-    const url = await urlRepository.findByShortCode(data.shortCode);
+async redirect(data: RedirectUrlDto) {
+    const cacheKey = `url:${data.shortCode}`;
 
-    if (!url) {
-      throw new NotFoundError("Short URL not found.");
+    const cachedUrl = await redisClient.get(cacheKey);
+
+    let url;
+
+    if (cachedUrl) {
+        url = JSON.parse(cachedUrl);
+    } else {
+        url = await urlRepository.findByShortCode(data.shortCode);
+
+        if (!url) {
+            throw new NotFoundError("Short URL not found.");
+        }
+        await redisClient.set(
+            cacheKey,
+            JSON.stringify({
+                id: url.id,
+                originalUrl: url.originalUrl,
+                isActive: url.isActive,
+                expiresAt: url.expiresAt,
+            }),
+            {
+                EX: 60 * 60 * 24,
+            }
+        );
     }
 
     if (!url.isActive) {
-      throw new ForbiddenError("This link is inactive.");
+        throw new ForbiddenError("This link is inactive.");
     }
 
-    if (url.expiresAt && url.expiresAt < new Date()) {
-      throw new GoneError("This link has expired.");
+    if (url.expiresAt && new Date(url.expiresAt) < new Date()) {
+        throw new GoneError("Expired link.");
     }
 
     await counterRepository.incrementClicks(url.id);
@@ -51,15 +74,15 @@ class UrlService {
     const { browser, os, device } = parseUserAgent(data.userAgent);
 
     await analyticsService.create({
-      url: url._id,
-      browser,
-      os,
-      device,
-      country: "Unknown",
+        url: url.id,
+        browser,
+        os,
+        device,
+        country: "Unknown",
     });
 
     return url.originalUrl;
-  }
+}
 }
 
 export default new UrlService();
