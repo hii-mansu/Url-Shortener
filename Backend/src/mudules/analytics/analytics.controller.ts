@@ -2,9 +2,9 @@ import { Request, Response } from "express";
 import analyticsService from "./analytics.service.js";
 
 class analyticsController {
-  analytics = async (req: Request, res: Response) => {
+  getAnalytics = async (req: Request, res: Response) => {
     const id = req.params.id as string;
-    const data = await analyticsService.analytics(id, req.user._id);
+    const data = await analyticsService.getAnalytics(id, req.user._id);
 
     return res.status(200).json({
       success: true,

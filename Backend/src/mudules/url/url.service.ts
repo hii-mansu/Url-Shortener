@@ -69,14 +69,12 @@ async redirect(data: RedirectUrlDto) {
         throw new GoneError("Expired link.");
     }
 
-    await counterRepository.incrementClicks(url.id);
 
-    const { browser, os, device } = parseUserAgent(data.userAgent);
+    const { browser, device } = parseUserAgent(data.userAgent);
 
-    await analyticsService.create({
-        url: url.id,
+    await analyticsService.recordClick({
+        urlId: url.id,
         browser,
-        os,
         device,
         country: "Unknown",
     });

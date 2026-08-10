@@ -7,7 +7,7 @@ const analyticsRouter = Router();
 analyticsRouter.get(
     "/:id/analytics",
     protectMiddleware,
-    analyticsController.analytics
+    analyticsController.getAnalytics
 );
 
 export default analyticsRouter;

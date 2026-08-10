@@ -1,18 +1,18 @@
 import { Types } from "mongoose";
 import { ForbiddenError } from "../../errors/ForbiddenError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
-import { CreateAnalyticsDto } from "./analysis.dto.js";
+import { RecordClickDto } from "./analysis.dto.js";
 import analyticsRepository from "./analytics.repository.js";
 import urlRepository from "../url/url.repository.js";
 
 
 
-class AnalyticsService {
-    async create(data: CreateAnalyticsDto) {
-        return analyticsRepository.create(data);
-    }
 
-    async analytics(urlId: string, userId: Types.ObjectId) {
+
+class AnalyticsService {
+
+
+    async getAnalytics(urlId: string, userId: Types.ObjectId) {
     const url = await urlRepository.findById(urlId);
 
     if (!url) {
@@ -30,6 +30,19 @@ class AnalyticsService {
         analytics,
     };
 }
+
+    async recordClick(data: RecordClickDto) {
+        const browser = data.browser || "Unknown";
+        const device = data.device || "Unknown";
+        const country = data.country || "Unknown";
+
+        return analyticsRepository.increment(
+            data.urlId,
+            browser,
+            device,
+            country
+        );
+    }
 }
 
 export default new AnalyticsService();

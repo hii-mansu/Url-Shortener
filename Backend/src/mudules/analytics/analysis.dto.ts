@@ -1,9 +1,9 @@
 import { Types } from "mongoose";
 
-export interface CreateAnalyticsDto {
-    url: Types.ObjectId;
+
+export interface RecordClickDto {
+    urlId: Types.ObjectId;
     browser: string;
-    os: string;
     device: string;
-    country?: string;
+    country: string;
 }

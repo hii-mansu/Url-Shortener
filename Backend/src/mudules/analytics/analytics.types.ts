@@ -2,8 +2,8 @@ import { Types } from "mongoose";
 
 export interface IAnalytics {
     url: Types.ObjectId;
-    browser: string;
-    os: string;
-    device: string;
-    country?: string;
+    totalClicks: number;
+    browsers: Map<string, number>;
+    devices: Map<string, number>;
+    countries: Map<string, number>;
 }

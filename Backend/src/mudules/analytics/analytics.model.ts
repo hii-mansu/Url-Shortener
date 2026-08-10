@@ -7,34 +7,36 @@ const analyticsSchema = new Schema<IAnalytics>(
             type: Schema.Types.ObjectId,
             ref: "Url",
             required: true,
+            unique: true,
         },
 
-        browser: {
-            type: String,
-            required: true,
+        totalClicks: {
+            type: Number,
+            default: 0,
         },
 
-        os: {
-            type: String,
-            required: true,
+        browsers: {
+            type: Map,
+            of: Number,
+            default: {},
         },
 
-        device: {
-            type: String,
-            required: true,
+        devices: {
+            type: Map,
+            of: Number,
+            default: {},
         },
 
-        country: {
-            type: String,
-            default: "Unknown",
+        countries: {
+            type: Map,
+            of: Number,
+            default: {},
         },
     },
     {
         timestamps: true,
     }
 );
-
-analyticsSchema.index({ url: 1, createdAt: -1 });
 
 const Analytics = model("Analytics", analyticsSchema);
 
