@@ -7,8 +7,8 @@ import { NotFoundError } from "../../errors/NotFoundError.js";
 import { ForbiddenError } from "../../errors/ForbiddenError.js";
 import { GoneError } from "../../errors/GoneError.js";
 import { parseUserAgent } from "../../shared/utils/userAgent.js";
-import analyticsService from "../analytics/analytics.service.js";
 import redisClient from "../../shared/lib/redis.js";
+import { analyticsQueue } from "../../queues/analytics.queue.js";
 
 class UrlService {
   async create(userId: Types.ObjectId, urlData: CreateUrlDto) {
@@ -20,7 +20,6 @@ class UrlService {
       originalUrl: urlData.originalUrl,
       shortCode,
       user: userId,
-      clicks: 0,
       isActive: true,
       expiresAt: null,
     });
@@ -32,7 +31,7 @@ class UrlService {
     };
   }
 
-async redirect(data: RedirectUrlDto) {
+  async redirect(data: RedirectUrlDto) {
     const cacheKey = `url:${data.shortCode}`;
 
     const cachedUrl = await redisClient.get(cacheKey);
@@ -40,47 +39,49 @@ async redirect(data: RedirectUrlDto) {
     let url;
 
     if (cachedUrl) {
-        url = JSON.parse(cachedUrl);
+      url = JSON.parse(cachedUrl);
     } else {
-        url = await urlRepository.findByShortCode(data.shortCode);
+      url = await urlRepository.findByShortCode(data.shortCode);
 
-        if (!url) {
-            throw new NotFoundError("Short URL not found.");
-        }
-        await redisClient.set(
-            cacheKey,
-            JSON.stringify({
-                id: url.id,
-                originalUrl: url.originalUrl,
-                isActive: url.isActive,
-                expiresAt: url.expiresAt,
-            }),
-            {
-                EX: 60 * 60 * 24,
-            }
-        );
+      if (!url) {
+        throw new NotFoundError("Short URL not found.");
+      }
+      await redisClient.set(
+        cacheKey,
+        JSON.stringify({
+          id: url.id,
+          originalUrl: url.originalUrl,
+          isActive: url.isActive,
+          expiresAt: url.expiresAt,
+        }),
+        {
+          EX: 60 * 60 * 24,
+        },
+      );
     }
 
     if (!url.isActive) {
-        throw new ForbiddenError("This link is inactive.");
+      throw new ForbiddenError("This link is inactive.");
     }
 
     if (url.expiresAt && new Date(url.expiresAt) < new Date()) {
-        throw new GoneError("Expired link.");
+      throw new GoneError("Expired link.");
     }
-
 
     const { browser, device } = parseUserAgent(data.userAgent);
 
-    await analyticsService.recordClick({
-        urlId: url.id,
+    analyticsQueue.add("record-click", {
+        urlId: url.id.toString(),
         browser,
         device,
-        country: "Unknown",
-    });
+        country:"Unknown",
+      })
+      .catch((error) => {
+        console.error("Failed to queue analytics:", error);
+      });
 
     return url.originalUrl;
-}
+  }
 }
 
 export default new UrlService();

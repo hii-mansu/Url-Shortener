@@ -25,11 +25,6 @@ const urlSchema = new Schema<IUrl>(
       select: false
     },
 
-    clicks: {
-      type: Number,
-      default: 0,
-    },
-
     isActive: {
       type: Boolean,
       default: true,
