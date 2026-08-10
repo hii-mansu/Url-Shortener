@@ -74,7 +74,7 @@ class UrlService {
         urlId: url.id.toString(),
         browser,
         device,
-        country:"Unknown",
+        ip:data.ip ?? "Unknown",
       })
       .catch((error) => {
         console.error("Failed to queue analytics:", error);

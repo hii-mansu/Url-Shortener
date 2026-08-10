@@ -19,7 +19,7 @@ redirect = async (req: Request<RedirectParams>, res: Response) => {
     const originalUrl = await urlService.redirect({
         shortCode: req.params.shortCode,
         userAgent: req.headers["user-agent"] || "",
-        ip: req.ip,
+        ip: req.ip ?? "Unknown",
     });
 
     return res.redirect(originalUrl);
