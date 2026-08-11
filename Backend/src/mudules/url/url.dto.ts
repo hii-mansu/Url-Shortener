@@ -7,3 +7,9 @@ export interface RedirectUrlDto {
     userAgent: string;
     ip?: string;
 }
+
+export interface UpdateUrlDto {
+    originalUrl?: string;
+    isActive?: boolean;
+    expiresAt?: Date | null;
+}

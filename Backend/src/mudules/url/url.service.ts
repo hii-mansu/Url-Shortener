@@ -2,7 +2,7 @@ import urlRepository from "./url.repository.js";
 import counterRepository from "../counter/counter.repository.js";
 import { toBase62 } from "../../shared/utils/base62.js";
 import { Types } from "mongoose";
-import { CreateUrlDto, RedirectUrlDto } from "./url.dto.js";
+import { CreateUrlDto, RedirectUrlDto, UpdateUrlDto } from "./url.dto.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 import { ForbiddenError } from "../../errors/ForbiddenError.js";
 import { GoneError } from "../../errors/GoneError.js";
@@ -70,11 +70,12 @@ class UrlService {
 
     const { browser, device } = parseUserAgent(data.userAgent);
 
-    analyticsQueue.add("record-click", {
+    analyticsQueue
+      .add("record-click", {
         urlId: url.id.toString(),
         browser,
         device,
-        ip:data.ip ?? "Unknown",
+        ip: data.ip ?? "Unknown",
       })
       .catch((error) => {
         console.error("Failed to queue analytics:", error);
@@ -85,6 +86,47 @@ class UrlService {
 
   async getMyUrls(userId: Types.ObjectId) {
     return urlRepository.findByUser(userId);
+  }
+
+  async getById(urlId: string, userId: Types.ObjectId) {
+    const url = await urlRepository.findById(urlId);
+
+    if (!url) {
+      throw new NotFoundError("URL not found.");
+    }
+
+    if (url.user.toString() !== userId.toString()) {
+      throw new ForbiddenError("You are not allowed to access this URL.");
+    }
+
+    return url;
+  }
+
+  async update(
+    urlId: string,
+    userId: Types.ObjectId,
+    data: UpdateUrlDto
+) {
+    const url = await urlRepository.findById(urlId);
+
+    if (!url) {
+        throw new NotFoundError("URL not found.");
+    }
+
+    if (url.user.toString() !== userId.toString()) {
+        throw new ForbiddenError(
+            "You are not allowed to update this URL."
+        );
+    }
+
+    const updatedUrl = await urlRepository.updateById(
+        urlId,
+        data
+    );
+
+    await redisClient.del(`url:${url.shortCode}`);
+
+    return updatedUrl;
 }
 }
 

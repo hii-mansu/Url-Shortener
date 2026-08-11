@@ -34,6 +34,30 @@ class UrlController {
       data: urls,
     });
   };
+
+  getById = async (req: Request, res: Response) => {
+    const url = await urlService.getById(req.params.id as string, req.user._id);
+
+    return res.status(200).json({
+      success: true,
+      message: "URL fetched successfully.",
+      data: url,
+    });
+  };
+
+  update = async (req: Request, res: Response) => {
+    const url = await urlService.update(
+      req.params.id as string,
+      req.user._id,
+      req.body,
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "URL updated successfully.",
+      data: url,
+    });
+  };
 }
 
 export default new UrlController();

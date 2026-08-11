@@ -13,11 +13,14 @@ urlRouter.post(
   urlController.create,
 );
 
-urlRouter.get(
-    "/getAll",
-    protectMiddleware,
-    urlController.getMyUrls
-);
+urlRouter.get("/getAll", protectMiddleware, urlController.getMyUrls);
 
+urlRouter.get("getone/:id", protectMiddleware, urlController.getById);
+
+urlRouter.patch(
+    "/update/:id",
+    protectMiddleware,
+    urlController.update
+);
 
 export default urlRouter;
