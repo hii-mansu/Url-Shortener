@@ -58,6 +58,18 @@ class UrlController {
       data: url,
     });
   };
+
+  delete = async (req: Request, res: Response) => {
+    await urlService.delete(
+        req.params.id as string,
+        req.user._id
+    );
+
+    return res.status(200).json({
+        success: true,
+        message: "URL deleted successfully.",
+    });
+};
 }
 
 export default new UrlController();

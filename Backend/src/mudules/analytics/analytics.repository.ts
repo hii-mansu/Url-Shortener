@@ -43,6 +43,12 @@ class AnalyticsRepository {
       },
     );
   }
+
+  async deleteByUrl(urlId: Types.ObjectId) {
+    return Analytics.findOneAndDelete({
+        url: urlId,
+    });
+}
 }
 
 export default new AnalyticsRepository();

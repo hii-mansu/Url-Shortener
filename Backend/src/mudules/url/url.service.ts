@@ -9,6 +9,7 @@ import { GoneError } from "../../errors/GoneError.js";
 import { parseUserAgent } from "../../shared/utils/userAgent.js";
 import redisClient from "../../shared/lib/redis.js";
 import { analyticsQueue } from "../../queues/analytics.queue.js";
+import analyticsRepository from "../analytics/analytics.repository.js";
 
 class UrlService {
   async create(userId: Types.ObjectId, urlData: CreateUrlDto) {
@@ -127,6 +128,31 @@ class UrlService {
     await redisClient.del(`url:${url.shortCode}`);
 
     return updatedUrl;
+}
+
+async delete(
+    urlId: string,
+    userId: Types.ObjectId
+) {
+    const url = await urlRepository.findById(urlId);
+
+    if (!url) {
+        throw new NotFoundError("URL not found.");
+    }
+
+    if (url.user.toString() !== userId.toString()) {
+        throw new ForbiddenError(
+            "You are not allowed to delete this URL."
+        );
+    }
+
+    await urlRepository.deleteById(urlId);
+
+    await redisClient.del(`url:${url.shortCode}`);
+
+    await analyticsRepository.deleteByUrl(url._id);
+
+    return true;
 }
 }
 

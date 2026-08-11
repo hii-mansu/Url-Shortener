@@ -23,4 +23,10 @@ urlRouter.patch(
     urlController.update
 );
 
+urlRouter.delete(
+    "delete/:id",
+    protectMiddleware,
+    urlController.delete
+);
+
 export default urlRouter;
