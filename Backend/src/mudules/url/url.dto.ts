@@ -1,5 +1,6 @@
 export interface CreateUrlDto {
     originalUrl: string;
+    expiresAt?: string | null;
 }
 
 export interface RedirectUrlDto {

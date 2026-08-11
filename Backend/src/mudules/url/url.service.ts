@@ -22,7 +22,7 @@ class UrlService {
       shortCode,
       user: userId,
       isActive: true,
-      expiresAt: null,
+      expiresAt: urlData.expiresAt ? new Date(urlData.expiresAt) : null,
     });
 
     return {

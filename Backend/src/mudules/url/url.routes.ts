@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { protectMiddleware } from "../../middlewares/protect.middleware.js";
 import { validateRequest } from "../../middlewares/validateRequest.js";
-import { createUrlSchema } from "./url.validation.js";
 import urlController from "./url.controller.js";
+import { createUrlSchema, updateUrlSchema } from "./url.validator.js";
 
 const urlRouter = Router();
 
@@ -20,6 +20,7 @@ urlRouter.get("getone/:id", protectMiddleware, urlController.getById);
 urlRouter.patch(
     "/update/:id",
     protectMiddleware,
+    validateRequest(updateUrlSchema),
     urlController.update
 );
 
