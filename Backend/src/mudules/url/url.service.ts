@@ -82,6 +82,10 @@ class UrlService {
 
     return url.originalUrl;
   }
+
+  async getMyUrls(userId: Types.ObjectId) {
+    return urlRepository.findByUser(userId);
+}
 }
 
 export default new UrlService();

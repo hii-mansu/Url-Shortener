@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import Url from "./url.model.js";
 import { IUrl } from "./url.types.js";
 
@@ -10,7 +11,7 @@ class UrlRepository {
         return Url.findOne({ shortCode });
     }
 
-    async findByUser(userId: string) {
+    async findByUser(userId: Types.ObjectId) {
         return Url.find({ user: userId }).sort({ createdAt: -1 });
     }
 
@@ -21,6 +22,8 @@ class UrlRepository {
     async deleteById(id: string) {
         return Url.findByIdAndDelete(id);
     }
+
+
 
 }
 

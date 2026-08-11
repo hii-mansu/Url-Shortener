@@ -13,5 +13,11 @@ urlRouter.post(
   urlController.create,
 );
 
+urlRouter.get(
+    "/getAll",
+    protectMiddleware,
+    urlController.getMyUrls
+);
+
 
 export default urlRouter;

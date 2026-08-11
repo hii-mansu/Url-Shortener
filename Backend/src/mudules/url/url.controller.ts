@@ -15,15 +15,25 @@ class UrlController {
     });
   };
 
-redirect = async (req: Request<RedirectParams>, res: Response) => {
+  redirect = async (req: Request<RedirectParams>, res: Response) => {
     const originalUrl = await urlService.redirect({
-        shortCode: req.params.shortCode,
-        userAgent: req.headers["user-agent"] || "",
-        ip: req.ip ?? "Unknown",
+      shortCode: req.params.shortCode,
+      userAgent: req.headers["user-agent"] || "",
+      ip: req.ip ?? "Unknown",
     });
 
     return res.redirect(originalUrl);
-};
+  };
+
+  getMyUrls = async (req: Request, res: Response) => {
+    const urls = await urlService.getMyUrls(req.user._id);
+
+    return res.status(200).json({
+      success: true,
+      message: "URLs fetched successfully.",
+      data: urls,
+    });
+  };
 }
 
 export default new UrlController();
