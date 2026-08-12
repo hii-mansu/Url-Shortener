@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import { IUrl } from "./url.types.js";
 import { Schema } from "mongoose";
 
-
 const urlSchema = new Schema<IUrl>(
   {
     originalUrl: {
@@ -22,7 +21,6 @@ const urlSchema = new Schema<IUrl>(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
-      select: false
     },
 
     isActive: {
@@ -37,7 +35,7 @@ const urlSchema = new Schema<IUrl>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 urlSchema.index({ user: 1 });

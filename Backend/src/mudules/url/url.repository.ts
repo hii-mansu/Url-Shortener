@@ -17,7 +17,7 @@ class UrlRepository {
   }
 
   async findById(id: string) {
-    return Url.findById(id);
+    return Url.findById(id).select("+user");
   }
 
   async deleteById(id: string) {

@@ -15,7 +15,7 @@ urlRouter.post(
 
 urlRouter.get("/getAll", protectMiddleware, urlController.getMyUrls);
 
-urlRouter.get("getone/:id", protectMiddleware, urlController.getById);
+urlRouter.get("/getone/:id", protectMiddleware, urlController.getById); //nw
 
 urlRouter.patch(
     "/update/:id",
@@ -25,9 +25,9 @@ urlRouter.patch(
 );
 
 urlRouter.delete(
-    "delete/:id",
+    "/delete/:id",
     protectMiddleware,
     urlController.delete
-);
+); //nw
 
 export default urlRouter;
