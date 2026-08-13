@@ -13,7 +13,13 @@ import analyticsRouter from "./mudules/analytics/analytics.router.js";
 
 const app = express();
 
-app.use(cors());
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 app.use(helmet());
 app.use(compression());
 app.use(morgan("dev"));
