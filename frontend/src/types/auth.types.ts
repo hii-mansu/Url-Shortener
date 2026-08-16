@@ -31,3 +31,11 @@ export interface UserResponse {
     user: AuthUser;
   };
 }
+
+export interface RefreshTokenResponse {
+  success: boolean;
+  message: string;
+  data: {
+    accessToken: string;
+  };
+}

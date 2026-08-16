@@ -7,6 +7,7 @@ import { AuthUser, LoginPayload, RegisterPayload } from "../types/auth.types";
 import {
   getCurrentUser,
   loginUser,
+  refreshAccessToken,
   registerUser,
 } from "../services/auth.service";
 import { setAccessToken } from "../lib/token";
@@ -68,19 +69,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    const checkAuth = async () => {
+    const initializeAuth = async () => {
       try {
-        const response = await getCurrentUser();
+        const response = await refreshAccessToken();
 
-        setUser(response.data.user);
+        setAccessToken(response.data.accessToken);
+
+        const userResponse = await getCurrentUser();
+
+        setUser(userResponse.data.user);
       } catch (error) {
+        setAccessToken(null);
         setUser(null);
       } finally {
         setLoading(false);
       }
     };
 
-    checkAuth();
+    initializeAuth();
   }, []);
 
   return (

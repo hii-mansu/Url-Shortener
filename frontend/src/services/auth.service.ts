@@ -2,6 +2,7 @@ import api from "../lib/api";
 import {
   AuthResponse,
   LoginPayload,
+  RefreshTokenResponse,
   RegisterPayload,
   UserResponse,
 } from "../types/auth.types";
@@ -33,5 +34,14 @@ export const getCurrentUser = async (): Promise<UserResponse> => {
 
   return response.data;
 };
+
+export const refreshAccessToken =
+  async (): Promise<RefreshTokenResponse> => {
+    const response = await api.post<RefreshTokenResponse>(
+      "/auth/refresh"
+    );
+
+    return response.data;
+  };
 
 
