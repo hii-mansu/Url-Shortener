@@ -19,7 +19,15 @@ export interface AuthResponse {
   success: boolean;
   message: string;
   data: {
+    user: AuthUser;
     accessToken: string;
+  };
+}
+
+export interface UserResponse {
+  success: boolean;
+  message: string;
+  data: {
     user: AuthUser;
   };
 }
