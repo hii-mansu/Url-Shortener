@@ -1,15 +1,18 @@
 import Sidebar from "@/src/components/dashboard/Sidebar";
 
+
 export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-   <div>
+    <div className="flex min-h-screen">
       <Sidebar />
 
-      <main>{children}</main>
+      <main className="flex-1 p-6">
+        {children}
+      </main>
     </div>
   );
 }
