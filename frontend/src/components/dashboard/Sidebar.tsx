@@ -29,33 +29,37 @@ export default function Sidebar() {
     },
   ];
 
+  const isActive = (href: string) => pathname === href;
+
   return (
-    <aside className="w-64 border-r min-h-screen p-4">
-      <h2 className="text-xl font-bold mb-8">
-        URL Shortener
-      </h2>
+    <aside className="hidden w-64 shrink-0 border-r border-gray-200 bg-white md:block">
+      <div className="sticky top-0 p-4">
+        <h2 className="mb-8 px-3 text-lg font-semibold text-gray-900">
+          Workspace
+        </h2>
 
-      <nav className="space-y-2">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          const active = pathname === item.href;
+        <nav className="space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href);
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
-                active
-                  ? "bg-black text-white"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              <Icon size={18} />
-              <span>{item.name}</span>
-            </Link>
-          );
-        })}
-      </nav>
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium ${
+                  active
+                    ? "bg-gray-100 text-gray-900"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`}
+              >
+                <Icon size={18} />
+                {item.name}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
     </aside>
   );
 }

@@ -43,7 +43,6 @@ export default function URLsPage() {
 
   return (
     <div>
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">
@@ -65,8 +64,7 @@ export default function URLsPage() {
         </button>
       </div>
 
-      {/* URLs table */}
-      <div className="mt-8 overflow-hidden border border-gray-200 bg-white">
+      <div className="mt-8 hidden overflow-hidden border border-gray-200 bg-white md:block">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead className="border-b border-gray-200 bg-gray-50">

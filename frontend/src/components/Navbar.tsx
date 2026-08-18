@@ -60,7 +60,10 @@ export default function Navbar() {
                     <User size={17} />
                   </span>
 
-                  <ChevronDown size={15} className="text-gray-500" />
+                  <ChevronDown
+                    size={15}
+                    className="text-gray-500"
+                  />
                 </button>
 
                 {isMenuOpen && (
@@ -82,6 +85,14 @@ export default function Navbar() {
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         Dashboard
+                      </Link>
+
+                      <Link
+                        href="/dashboard/profile"
+                        onClick={() => setIsMenuOpen(false)}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        Profile
                       </Link>
 
                       <Link
