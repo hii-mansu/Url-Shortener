@@ -1,4 +1,14 @@
-import { Copy, ExternalLink, MoreHorizontal, Plus } from "lucide-react";
+"use client";
+
+import {
+  Copy,
+  ExternalLink,
+  MoreHorizontal,
+  Plus,
+} from "lucide-react";
+import { useState } from "react";
+import CreateUrlModal from "@/components/urls/CreateUrlModal";
+import DeleteUrlModal from "@/components/urls/DeleteUrlModal";
 
 const urls = [
   {
@@ -28,8 +38,12 @@ const urls = [
 ];
 
 export default function URLsPage() {
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+
   return (
     <div>
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">
@@ -43,6 +57,7 @@ export default function URLsPage() {
 
         <button
           type="button"
+          onClick={() => setIsCreateOpen(true)}
           className="flex h-10 items-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white hover:bg-blue-700"
         >
           <Plus size={17} />
@@ -50,6 +65,7 @@ export default function URLsPage() {
         </button>
       </div>
 
+      {/* URLs table */}
       <div className="mt-8 overflow-hidden border border-gray-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
@@ -139,6 +155,7 @@ export default function URLsPage() {
 
                       <button
                         type="button"
+                        onClick={() => setIsDeleteOpen(true)}
                         className="text-gray-400 hover:text-gray-900"
                         title="More actions"
                       >
@@ -152,6 +169,18 @@ export default function URLsPage() {
           </table>
         </div>
       </div>
+
+      {/* Create URL Modal */}
+      <CreateUrlModal
+        open={isCreateOpen}
+        onClose={() => setIsCreateOpen(false)}
+      />
+
+      {/* Delete URL Modal */}
+      <DeleteUrlModal
+        open={isDeleteOpen}
+        onClose={() => setIsDeleteOpen(false)}
+      />
     </div>
   );
 }
