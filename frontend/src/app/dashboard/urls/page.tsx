@@ -1,5 +1,7 @@
 "use client";
 
+import CreateUrlModal from "@/src/components/urls/CreateUrlModal";
+import DeleteUrlModal from "@/src/components/urls/DeleteUrlModal";
 import {
   Copy,
   ExternalLink,
@@ -7,8 +9,6 @@ import {
   Plus,
 } from "lucide-react";
 import { useState } from "react";
-import CreateUrlModal from "@/components/urls/CreateUrlModal";
-import DeleteUrlModal from "@/components/urls/DeleteUrlModal";
 
 const urls = [
   {
@@ -170,13 +170,11 @@ export default function URLsPage() {
         </div>
       </div>
 
-      {/* Create URL Modal */}
       <CreateUrlModal
         open={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
       />
 
-      {/* Delete URL Modal */}
       <DeleteUrlModal
         open={isDeleteOpen}
         onClose={() => setIsDeleteOpen(false)}
